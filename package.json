@@ -1,6 +1,7 @@
 {
   "name": "emacs-verilog-mode",
   "displayName": "emacs-verilog-mode",
+  "publisher": "vd-vignesh0025",
   "description": "This extension acts as wrapper on top of emacs verilog mode",
   "version": "0.0.1",
   "license": "MIT",
