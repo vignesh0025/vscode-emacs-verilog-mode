@@ -3,6 +3,10 @@
   "displayName": "emacs-verilog-mode",
   "description": "This extension acts as wrapper on top of emacs verilog mode",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vignesh0025/vscode-emacs-verilog-mode"
+  },
   "engines": {
     "vscode": "^1.115.0"
   },
