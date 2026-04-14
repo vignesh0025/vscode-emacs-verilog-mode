@@ -1,0 +1,481 @@
+{
+  "name": "emacs-verilog-mode",
+  "displayName": "emacs-verilog-mode",
+  "description": "This extension acts as wrapper on top of emacs verilog mode",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.115.0"
+  },
+  "categories": [
+    "Formatters",
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:verilog",
+    "onLanguage:systemverilog"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "emacs-verilog-mode.auto",
+        "title": "Verilog: Expand AUTOs",
+        "enablement": "editorLangId =~ /verilog|systemverilog/"
+      },
+      {
+        "command": "emacs-verilog-mode.deleteAuto",
+        "title": "Verilog: Delete AUTOs",
+        "enablement": "editorLangId =~ /verilog|systemverilog/"
+      },
+      {
+        "command": "emacs-verilog-mode.injectAuto",
+        "title": "Verilog: Inject AUTOs",
+        "enablement": "editorLangId =~ /verilog|systemverilog/"
+      },
+      {
+        "command": "emacs-verilog-mode.indentBuffer",
+        "title": "Verilog: Indent Buffer",
+        "enablement": "editorLangId =~ /verilog|systemverilog/"
+      },
+      {
+        "command": "emacs-verilog-mode.prettyDeclarations",
+        "title": "Verilog: Align Declarations",
+        "enablement": "editorLangId =~ /verilog|systemverilog/"
+      },
+      {
+        "command": "emacs-verilog-mode.prettyExpr",
+        "title": "Verilog: Align Expressions",
+        "enablement": "editorLangId =~ /verilog|systemverilog/"
+      },
+      {
+        "command": "emacs-verilog-mode.deleteTrailingWhitespace",
+        "title": "Verilog: Delete Trailing Whitespace",
+        "enablement": "editorLangId =~ /verilog|systemverilog/"
+      },
+      {
+        "command": "emacs-verilog-mode.diffAuto",
+        "title": "Verilog: Diff AUTOs",
+        "enablement": "editorLangId =~ /verilog|systemverilog/"
+      }
+    ],
+    "configuration": {
+      "title": "Emacs Verilog Mode",
+      "properties": {
+        "emacsVerilogMode.emacsPath": {
+          "type": "string",
+          "default": "emacs",
+          "description": "Path to the emacs executable."
+        },
+        "emacsVerilogMode.autoArgFormat": {
+          "type": "string",
+          "enum": ["packed", "single"],
+          "default": null,
+          "description": "Formatting for AUTOARG signals. 'packed' = multiple per line, 'single' = one per line."
+        },
+        "emacsVerilogMode.autoArgSort": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means AUTOARG signals are sorted alphabetically."
+        },
+        "emacsVerilogMode.autoDeclareNettype": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Data type for auto-input etc. Set to 'wire' if using `default_nettype none."
+        },
+        "emacsVerilogMode.autoDeleteTrailingWhitespace": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means delete trailing whitespace during verilog-auto."
+        },
+        "emacsVerilogMode.autoEndcomments": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means insert comments after end statements."
+        },
+        "emacsVerilogMode.autoIgnoreConcat": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means ignore signals in {...} concatenations for AUTOWIRE etc."
+        },
+        "emacsVerilogMode.autoIndentOnNewline": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means automatically indent after newline."
+        },
+        "emacsVerilogMode.autoInstColumn": {
+          "type": "number",
+          "default": null,
+          "description": "Column number for net name part of AUTOINST-created pins."
+        },
+        "emacsVerilogMode.autoInstDotName": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means use .name syntax (SystemVerilog) in AUTOINST."
+        },
+        "emacsVerilogMode.autoInstInterfacedPorts": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means include interfaced ports in AUTOINST."
+        },
+        "emacsVerilogMode.autoInstParamValue": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means replace parameters with actual values in AUTOINST."
+        },
+        "emacsVerilogMode.autoInstParamValueType": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means expand parameter types in instantiations."
+        },
+        "emacsVerilogMode.autoInstSort": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means AUTOINST signals are sorted."
+        },
+        "emacsVerilogMode.autoInstTemplateNumbers": {
+          "type": ["string", "boolean", "null"],
+          "default": null,
+          "description": "Add template comments to AUTOINST ports. 'lhs' or true for line numbers."
+        },
+        "emacsVerilogMode.autoInstTemplateRequired": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means only templated ports are included in AUTOINST."
+        },
+        "emacsVerilogMode.autoInstVector": {
+          "type": ["string", "boolean", "null"],
+          "default": null,
+          "description": "Use bus subscripts in AUTOINST. true, 'unsigned', or nil."
+        },
+        "emacsVerilogMode.autoLineup": {
+          "type": ["string", "null"],
+          "enum": ["all", "declarations", "assignments", null],
+          "default": null,
+          "description": "Type of statements to line up. 'all', 'declarations', or 'assignments'."
+        },
+        "emacsVerilogMode.autoNewline": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means automatically insert newline after semicolons."
+        },
+        "emacsVerilogMode.autoReadIncludes": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means automatically read includes before AUTOs."
+        },
+        "emacsVerilogMode.autoResetBlockingInNon": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means AUTORESET also resets blocking assignments in non-blocking blocks."
+        },
+        "emacsVerilogMode.autoResetWidths": {
+          "type": ["string", "boolean", "null"],
+          "default": null,
+          "description": "Width style for AUTORESET. true = sized, 'unbased' = '0, nil = 0."
+        },
+        "emacsVerilogMode.autoSavePolicy": {
+          "type": ["string", "null"],
+          "enum": ["force", "detect", "ask", null],
+          "default": null,
+          "description": "Action on save: 'force', 'detect', 'ask', or null (disabled)."
+        },
+        "emacsVerilogMode.autoSenseDefinesConstant": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means AUTOSENSE assumes all defines are constants."
+        },
+        "emacsVerilogMode.autoSenseIncludeInputs": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means AUTOSENSE includes all inputs."
+        },
+        "emacsVerilogMode.autoSimplifyExpressions": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means AUTOs simplify bit range expressions."
+        },
+        "emacsVerilogMode.autoStarExpand": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means expand SystemVerilog .* ports like AUTOINST."
+        },
+        "emacsVerilogMode.autoStarSave": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means save expanded .* connections to disk."
+        },
+        "emacsVerilogMode.autoTemplateWarnUnused": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means warn if an AUTO_TEMPLATE line is unused."
+        },
+        "emacsVerilogMode.autoTieoffDeclaration": {
+          "type": "string",
+          "default": null,
+          "description": "Data type for AUTOTIEOFF declarations ('wire', 'assign', etc)."
+        },
+        "emacsVerilogMode.autoWireComment": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means insert To/From comments with AUTOWIRE."
+        },
+        "emacsVerilogMode.autoWireType": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Data type for AUTOWIRE. Set to 'logic' for SystemVerilog."
+        },
+        "emacsVerilogMode.activeLowRegexp": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Regexp for active-low signals (tied to 1 in AUTORESET/AUTOTIEOFF)."
+        },
+        "emacsVerilogMode.autoInoutIgnoreRegexp": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Signals matching this regexp are excluded from AUTOINOUT."
+        },
+        "emacsVerilogMode.autoInputIgnoreRegexp": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Signals matching this regexp are excluded from AUTOINPUT."
+        },
+        "emacsVerilogMode.autoOutputIgnoreRegexp": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Signals matching this regexp are excluded from AUTOOUTPUT."
+        },
+        "emacsVerilogMode.autoTieoffIgnoreRegexp": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Signals matching this regexp are excluded from AUTOTIEOFF."
+        },
+        "emacsVerilogMode.autoUnusedIgnoreRegexp": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Signals matching this regexp are excluded from AUTOUNUSED."
+        },
+        "emacsVerilogMode.autoRegInputAssignedIgnoreRegexp": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Signals matching this regexp are excluded from AUTOREGINPUT."
+        },
+        "emacsVerilogMode.typedefRegexp": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Regexp matching typedef names (e.g. '_t$'). Disabled by default."
+        },
+        "emacsVerilogMode.indentLevel": {
+          "type": "number",
+          "default": null,
+          "description": "Indentation of statements relative to containing block."
+        },
+        "emacsVerilogMode.indentLevelBehavioral": {
+          "type": "number",
+          "default": null,
+          "description": "Absolute indentation of first begin in a task/function."
+        },
+        "emacsVerilogMode.indentLevelDeclaration": {
+          "type": "number",
+          "default": null,
+          "description": "Indentation of declarations relative to containing block."
+        },
+        "emacsVerilogMode.indentLevelDirective": {
+          "type": "number",
+          "default": null,
+          "description": "Indentation added per ifdef nesting level."
+        },
+        "emacsVerilogMode.indentLevelModule": {
+          "type": "number",
+          "default": null,
+          "description": "Indentation of module-level statements (always, initial, etc)."
+        },
+        "emacsVerilogMode.indentBeginAfterIf": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means indent begin after if/else/while."
+        },
+        "emacsVerilogMode.indentClassInsidePkg": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means indent classes inside packages."
+        },
+        "emacsVerilogMode.indentDeclarationMacros": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means treat macro expansions as part of declarations for alignment."
+        },
+        "emacsVerilogMode.indentIgnoreMultilineDefines": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means ignore indentation on multiline define continuations."
+        },
+        "emacsVerilogMode.indentIgnoreRegexp": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Regexp matching lines to ignore for indentation."
+        },
+        "emacsVerilogMode.indentLists": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means indent items in sensitivity lists etc."
+        },
+        "emacsVerilogMode.caseIndent": {
+          "type": "number",
+          "default": null,
+          "description": "Indentation for case statements."
+        },
+        "emacsVerilogMode.cexpIndent": {
+          "type": "number",
+          "default": null,
+          "description": "Indentation of statements split across lines."
+        },
+        "emacsVerilogMode.tabAlwaysIndent": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means TAB always re-indents the current line."
+        },
+        "emacsVerilogMode.tabToComment": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means TAB moves to the right-hand column for a comment."
+        },
+        "emacsVerilogMode.alignAssignExpr": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means align expressions of continuous assignments."
+        },
+        "emacsVerilogMode.alignCommentDistance": {
+          "type": "number",
+          "default": null,
+          "description": "Distance (spaces) between longest declaration and comments."
+        },
+        "emacsVerilogMode.alignDeclExprComments": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means align declaration and expression comments."
+        },
+        "emacsVerilogMode.alignIfelse": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means align else under matching if."
+        },
+        "emacsVerilogMode.alignTypedefRegexp": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Regexp matching user typedefs for declaration alignment."
+        },
+        "emacsVerilogMode.assignmentDelay": {
+          "type": "string",
+          "default": null,
+          "description": "Text used for delays in delayed assignments."
+        },
+        "emacsVerilogMode.highlightGroupingKeywords": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means highlight begin/end more dramatically."
+        },
+        "emacsVerilogMode.highlightIncludes": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means highlight include file names."
+        },
+        "emacsVerilogMode.highlightModules": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means highlight module names (experimental)."
+        },
+        "emacsVerilogMode.highlightTranslateOff": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means background-highlight translate_off regions."
+        },
+        "emacsVerilogMode.libraryDirectories": {
+          "type": "string",
+          "default": null,
+          "description": "Elisp list of directories for AUTOINST, e.g. '(\".\" \"subdir\")'."
+        },
+        "emacsVerilogMode.libraryExtensions": {
+          "type": "string",
+          "default": null,
+          "description": "Elisp list of extensions for module lookup, e.g. '(\".v\" \".sv\")'."
+        },
+        "emacsVerilogMode.libraryFiles": {
+          "type": "string",
+          "default": null,
+          "description": "Elisp list of file paths for module lookup."
+        },
+        "emacsVerilogMode.libraryFlags": {
+          "type": "string",
+          "default": null,
+          "description": "Elisp list of Verilog-XL-style flags, e.g. '(\"-y dir\")'."
+        },
+        "emacsVerilogMode.compiler": {
+          "type": "string",
+          "default": null,
+          "description": "Program and arguments to compile Verilog source."
+        },
+        "emacsVerilogMode.coverage": {
+          "type": "string",
+          "default": null,
+          "description": "Program and arguments for coverage annotation."
+        },
+        "emacsVerilogMode.linter": {
+          "type": "string",
+          "default": null,
+          "description": "Program and arguments to run a lint checker."
+        },
+        "emacsVerilogMode.preprocessor": {
+          "type": "string",
+          "default": null,
+          "description": "Program and arguments to preprocess Verilog source."
+        },
+        "emacsVerilogMode.simulator": {
+          "type": "string",
+          "default": null,
+          "description": "Program and arguments to interpret Verilog source."
+        },
+        "emacsVerilogMode.caseFold": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means regexps ignore case. nil is recommended."
+        },
+        "emacsVerilogMode.minimumCommentDistance": {
+          "type": "number",
+          "default": null,
+          "description": "Minimum lines between begin and end before a comment is added."
+        },
+        "emacsVerilogMode.warnFatal": {
+          "type": "boolean",
+          "default": null,
+          "description": "Non-nil means warnings are fatal errors."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.115.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "typescript-eslint": "^8.56.1",
+    "eslint": "^9.39.3",
+    "esbuild": "^0.27.3",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
